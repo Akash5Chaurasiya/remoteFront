@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRouteAdminRoute = ({ children }: any) => {
-    const data = useSelector((state: any) => state.initial.loginData);
-    console.log(data.user.firstName);
-    if (data.user.firstName === 'Admin') {
+    const storedUserData = localStorage.getItem('userData');
+    const userData = storedUserData ? JSON.parse(storedUserData) : null;
+    console.log(userData);
+    console.log(userData.firstName);
+    useEffect(() => {
+    }, []);
+    if (userData  && userData.firstName =='Admin') {
         return <>{children}</>;
     } else {
         return (

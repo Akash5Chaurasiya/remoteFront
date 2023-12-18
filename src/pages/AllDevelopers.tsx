@@ -1,25 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { allDevsAsync } from '../redux/Slice/InitalSlice';
 import './styles.css'; // Import the CSS file
 
 const AllDevelopers = () => {
+    const [data, setData] = useState<any>()
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(allDevsAsync());
+        dispatch(allDevsAsync()).then((el: any) => {
+            console.log(el);
+            setData(el.payload)
+        }).catch((err: any) => {
+            console.log(err);
+        });
     }, []);
-
-    const data = useSelector((state: any) => state.initial.allDev);
-
+    console.log(data);
     return (
         <div className="all-developers-container">
             <h2>All Developers</h2>
-            {data.user.map((developer: any) => (
+            {data && data?.user.map((developer: any) => (
                 <div key={developer._id} className="developer-card">
                     <h3>{`${developer.firstName} ${developer.lastName}`}</h3>
                     <p>Email: {developer.email}</p>
                     <p>Phone Number: {developer.phoneNumber}</p>
-
                     <div className="experience-section">
                         <h4>Professional Experience:</h4>
                         {developer.professionalExperience.map((exp: any, index: number) => (
@@ -30,7 +33,6 @@ const AllDevelopers = () => {
                             </div>
                         ))}
                     </div>
-
                     <div className="experience-section">
                         <h4>Educational Experience:</h4>
                         {developer.educationalExperience.map((edu: any, index: number) => (
@@ -41,12 +43,12 @@ const AllDevelopers = () => {
                             </div>
                         ))}
                     </div>
-
                     {/* Add other details from the developer object */}
                 </div>
             ))}
         </div>
     );
+
 };
 
 export default AllDevelopers;
